@@ -16,6 +16,7 @@
         <div class="mb-5">
             <a href="/product"><button class="btn btn-info">Product</button></a>
             <a href="/product-category"><button class="btn btn-info">Product Category</button></a>
+            <a href="/logout"><button class="btn btn-danger float-right" id="logout">Logout</button></a>
         </div>
         <table class="table table-striped">
             <thead>

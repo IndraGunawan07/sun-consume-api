@@ -11,11 +11,41 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 </head>
 <body>
+    <script>        
+        function getCookieValue(cookieName) {
+            var cookies = document.cookie.split(';');
+
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = cookies[i].trim();
+                var separatorIndex = cookie.indexOf('=');
+                var name = cookie.substr(0, separatorIndex);
+
+                if (name === cookieName) {
+                var value = cookie.substr(separatorIndex + 1);
+                return decodeURIComponent(value);
+                }
+            }
+
+            return null; // Cookie not found
+        }
+
+        // Usage example
+        var token = getCookieValue('token');
+        if(token){
+            window.location.href = '/dashboard';
+        }
+    </script>
     <div class="container mt-5" style="width: 500px">
         <h3 class="mb-4">Sign In</h3>
         @isset($success)
             <div class="container alert alert-success">
                 {{ $success }}
+            </div>
+        @endisset
+
+        @isset($unauthorized)
+            <div class="container alert alert-danger">
+                {{ $unauthorized }}
             </div>
         @endisset
         

@@ -12,9 +12,11 @@
 </head>
 <body>
     <div class="container">
-        <a href="/product/create"><button type="button" class="btn btn-primary mt-5 mr-5 mb-5">+ Add Product</button></a>
-    </div>
-    <div class="container">
+        <h3 class="mb-4 mt-4">Product List</h3>
+        <div class="mb-5">
+            <a href="/dashboard"><button class="btn btn-secondary">Back to Dashboard</button></a>
+            <a href="/product/create"><button type="button" class="btn btn-info float-right">+ Insert Product</button></a>
+        </div>
         <table class="table table-striped">
             <thead>
                 <tr>
@@ -42,7 +44,7 @@
                     <td>
                         <div class="row">
                             <a href="/product/{{ $products['id'] }}/pay"><button type="button" class="btn btn-primary mr-2">Pay</button></a>
-                            <a href="/product/{{ $products['id'] }}"><button type="button" class="btn btn-success mr-2">Edit</button></a>
+                            <a href="/product/{{ $products['id'] }}"><button type="button" class="btn btn-info mr-2">Edit</button></a>
                             <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#myModal" id="deleteBtn" data-id={{ $products['id'] }}>Delete</button>
                         </div>
                     </td>
@@ -51,7 +53,7 @@
             </tbody>
         </table>
     </div>
-     <!-- Modal -->
+    <!-- Modal -->
     <div class="container">
         <div id="myModal" class="modal fade" role="dialog">
             <div class="modal-dialog">

@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+session_start();
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -13,8 +14,11 @@ class Auth extends Controller
   }
 
   function register(Request $request){
-    $endpoint = "localhost:8000/api/user/register";
+    if(isset($_COOKIE['token'])){
+      return redirect('/dashboard');
+    }
 
+    $endpoint = "localhost:8000/api/user/register";
     try {
         $response = $this->client->request('POST', $endpoint, ['query' => [
           'email' => $request->email,
@@ -42,8 +46,11 @@ class Auth extends Controller
   }
 
   function login(Request $request){
-    $endpoint = "localhost:8000/api/user/login";
+    if(isset($_COOKIE['token'])){
+      return redirect('/dashboard');
+    }
 
+    $endpoint = "localhost:8000/api/user/login";
     try{
       $response = $this->client->request('POST', $endpoint, ['query' => [
         'email' => $request->email,
@@ -66,17 +73,33 @@ class Auth extends Controller
     }
     $data = json_decode($response->getBody(), true);
     $token = $data['token'];
-    echo "<script>localStorage.setItem('token', \"$token\")</script>";
+    // return view('auth/login')->with('token', $token);
+    // echo "<script>localStorage.setItem('token', \"$token\")</script>";
 
-    // $endpoint = "localhost:8000/api/product-category";
-    // $response = $this->client->request('GET', $endpoint);
+    setcookie('token', $token);
     return redirect('/dashboard');
-    return view('auth/dashboard')->with('data', json_decode($response->getBody(), true));
   }
 
   function dashboard(){
     $endpoint = "localhost:8000/api/product-category";
-    $response = $this->client->request('GET', $endpoint);
+    if(!isset($_COOKIE['token'])){
+      return redirect('/login');
+    }
+    $response = $this->client->request('GET', $endpoint, ['headers' => [
+      'Authorization' => 'Bearer ' . $_COOKIE['token']
+    ]]);
     return view('auth/dashboard')->with('data', json_decode($response->getBody(), true));
+  }
+
+  function logout(){
+    if(!isset($_COOKIE['token'])){
+      return redirect('/login');
+    }
+    $endpoint = "localhost:8000/api/user/logout";
+    $response = $this->client->request('GET', $endpoint, ['headers' => [
+      'Authorization' => 'Bearer ' . $_COOKIE['token']
+    ]]);
+    setcookie('token', '', time() - 3600);
+    return redirect('/login');
   }
 }

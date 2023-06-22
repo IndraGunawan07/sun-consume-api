@@ -14,37 +14,61 @@ class Product extends Controller
   }
 
   function index(){
+    if(!isset($_COOKIE['token'])){
+      return redirect('/login');
+    }
+
     $endpoint = "localhost:8000/api/product";
-    $response = $this->client->request('GET', $endpoint);
+    $response = $this->client->request('GET', $endpoint, ['headers' => [
+      'Authorization' => 'Bearer ' . $_COOKIE['token']
+    ]]);
     return view('product/product')->with('product', json_decode($response->getBody(), true));
   }   
 
   function productCategoryList(){
-    $endpoint = "localhost:8000/api/product-category";
+    if(!isset($_COOKIE['token'])){
+      return redirect('/login');
+    }
 
-    $response = $this->client->request('GET', $endpoint);
+    $endpoint = "localhost:8000/api/product-category";
+    $response = $this->client->request('GET', $endpoint, ['headers' => [
+      'Authorization' => 'Bearer ' . $_COOKIE['token']
+    ]]);
     return view('product/productInsert')->with('productCategory', json_decode($response->getBody(), true));
   }
 
   function insert(Request $request){
-    $endpoint = "localhost:8000/api/product";
+    if(!isset($_COOKIE['token'])){
+      return redirect('/login');
+    }
 
+    $endpoint = "localhost:8000/api/product";
     $response = $this->client->request('POST', $endpoint, ['query' => [
       'name' => $request->name,
       'productCategoryId' => $request->category,
       'price' => $request->price,
       'show' => $request->show
+    ]], ['headers' => [
+      'Authorization' => 'Bearer ' . $_COOKIE['token']
     ]]);
     return redirect('/product');
   }
 
   function detail($id = ''){
+    if(!isset($_COOKIE['token'])){
+      return redirect('/login');
+    }
+
     $endpoint = "localhost:8000/api/product/" . $id;
-    $product = $this->client->request('GET', $endpoint);
+    $product = $this->client->request('GET', $endpoint, ['headers' => [
+      'Authorization' => 'Bearer ' . $_COOKIE['token']
+    ]]);
 
     // Product Category
     $endpoint = "localhost:8000/api/product-category";
-    $productCategory = $this->client->request('GET', $endpoint);
+    $productCategory = $this->client->request('GET', $endpoint, ['headers' => [
+      'Authorization' => 'Bearer ' . $_COOKIE['token']
+    ]]);
 
     return view('product/productEdit')
       ->with('product', json_decode($product->getBody(), true))
@@ -52,26 +76,43 @@ class Product extends Controller
   }
 
   function update(Request $request, $id = ''){
-    $endpoint = "localhost:8000/api/product/" . $id;
+    if(!isset($_COOKIE['token'])){
+      return redirect('/login');
+    }
 
+    $endpoint = "localhost:8000/api/product/" . $id;
     $response = $this->client->request('PUT', $endpoint, ['query' => [
       'name' => $request->name,
       'productCategoryId' => $request->category,
       'price' => $request->price,
       'show' => $request->show
+    ]], ['headers' => [
+      'Authorization' => 'Bearer ' . $_COOKIE['token']
     ]]);
     return redirect('/product');
   }
 
   function delete($id = ''){
+    if(!isset($_COOKIE['token'])){
+      return redirect('/login');
+    }
+
     $endpoint = "localhost:8000/api/product/" . $id;
-    $response = $this->client->request('DELETE', $endpoint);
+    $response = $this->client->request('DELETE', $endpoint, ['headers' => [
+      'Authorization' => 'Bearer ' . $_COOKIE['token']
+    ]]);
     return redirect('/product');
   }
 
   function pay($id = ''){
+    if(!isset($_COOKIE['token'])){
+      return redirect('/login');
+    }
+
     $endpoint = "localhost:8000/api/product/" . $id . '/pay';
-    $response = $this->client->request('GET', $endpoint);
+    $response = $this->client->request('GET', $endpoint, ['headers' => [
+      'Authorization' => 'Bearer ' . $_COOKIE['token']
+    ]]);
 
     $data = json_decode($response->getBody(), true);
     $url = $data['redirect_url'];

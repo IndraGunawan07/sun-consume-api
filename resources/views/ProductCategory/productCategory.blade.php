@@ -12,14 +12,16 @@
 </head>
 <body>
     <div class="container">
-        <a href="/product-category/create"><button type="button" class="btn btn-primary mt-5 mr-5 mb-5">+ Add Product Category</button></a>
-    </div>
-    @isset($messages)
-        <div class="container alert alert-danger">
-            {{ $messages }}
+        <h3 class="mb-4 mt-4">Product Category List</h3>
+        <div class="mb-5">
+            <a href="/dashboard"><button class="btn btn-secondary">Back to Dashboard</button></a>
+            <a href="/product-category/create"><button type="button" class="btn btn-info float-right">+ Insert Product Category</button></a>
         </div>
-    @endisset
-    <div class="container">
+        @isset($messages)
+            <div class="container alert alert-danger">
+                {{ $messages }}
+            </div>
+        @endisset
         <table class="table table-striped">
             <thead>
                 <tr>
@@ -42,7 +44,7 @@
                     @endif
                     <td>
                         <div class="row">
-                            <a href="/product-category/{{ $productCategoryRow['id'] }}"><button type="button" class="btn btn-success mr-2">Edit</button></a>
+                            <a href="/product-category/{{ $productCategoryRow['id'] }}"><button type="button" class="btn btn-info mr-2">Edit</button></a>
                             <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#myModal" id="deleteBtn" data-id={{ $productCategoryRow['id'] }}>Delete</button>
                         </div>
                     </td>

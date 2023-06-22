@@ -26,6 +26,7 @@ Route::get('/login', function () {
 });
 Route::post('/login', [App\Http\Controllers\Auth::class, 'login']);
 Route::post('/register', [App\Http\Controllers\Auth::class, 'register']);
+Route::get('/logout', [App\Http\Controllers\Auth::class, 'logout']);
 
 Route::get('/dashboard', [App\Http\Controllers\Auth::class, 'dashboard']);
 
